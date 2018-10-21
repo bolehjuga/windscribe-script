@@ -1,1 +1,15 @@
-data:text/javascript,%2F*windscribe*%2Ffunction%20FindProxyForURL(url%2C%20host)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(isPlainHostName(host)%20%7C%7C%20%20shExpMatch(host%2C%20%22*.local%22)%20%7C%7C%20shExpMatch(host%2C%20%22*.int%22)%20%7C%7C%20shExpMatch(url%2C%20%22*%3A%2F%2Fapi.windscribe.com%2F*%22))%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22DIRECT%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20var%20lanIps%20%3D%20%2F(%5E127.)%7C(%5E192.168.)%7C(%5E10.)%7C(%5E172.1%5B6-9%5D.)%7C(%5E172.2%5B0-9%5D.)%7C(%5E172.3%5B0-1%5D.)%2F%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if(lanIps.test(host))%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22DIRECT%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20(url.substring(0%2C%205)%20%3D%3D%20'http%3A'%20%7C%7C%20url.substring(0%2C%206)%20%3D%3D%20'https%3A'%20%7C%7C%20url.substring(0%2C%204)%20%3D%3D%20'ftp%3A'%20%7C%7C%20url.substring(0%2C%203)%20%3D%3D%20'ws%3A')%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20%22HTTPS%20ext-start.windscribe.com%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20'DIRECT'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D
+function FindProxyForURL(url, host) {
+                    if (isPlainHostName(host) ||  shExpMatch(host, "*.local") || shExpMatch(host, "*.int") || shExpMatch(url, "*://api.windscribe.com/*"))
+                        return "DIRECT";
+                
+                    var lanIps = /(^127.)|(^192.168.)|(^10.)|(^172.1[6-9].)|(^172.2[0-9].)|(^172.3[0-1].)/;
+                    if(lanIps.test(host))
+                        return "DIRECT";
+                
+                
+                    if (url.substring(0, 5) == 'http:' || url.substring(0, 6) == 'https:' || url.substring(0, 4) == 'ftp:' || url.substring(0, 3) == 'ws:') {
+                        return "HTTPS ext-start.windscribe.com";
+                    }
+                
+                    return 'DIRECT';
+                }
